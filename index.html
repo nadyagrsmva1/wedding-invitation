@@ -27,6 +27,20 @@
             }
         }
 
+        :root {
+            --app-height: 100%;
+        }
+
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            height: var(--app-height);
+        }
+
         body {
             margin: 0 !important;
             padding: 0 !important;
@@ -47,19 +61,6 @@
             z-index: -100;    
             background-size: cover;
         }
-        /* img#greeter-pic {
-            position: absolute;
-            left: 50%;
-            margin-left: -50%;
-            top: 50%;
-            margin-top: -50%;
-            width: auto;
-            min-width: 100%;
-            height: auto;
-            min-height: 100%;
-            z-index: -99;    
-            background-size: cover;
-        } */
         #content {
             margin: 0 !important;
             padding: 0 !important;
@@ -250,6 +251,17 @@
     <video id="bgVideo" preload="true" autoplay loop muted playsinline>
         <source src="background-loop.mp4" type="video/mp4" />
     </video>
+    <script>
+        var bgvideo = document.getElementById("bgVideo");
+        bgvideo.muted = true;
+        bgvideo.play();
+        const appHeight = () => {
+            const doc = document.documentElement
+            doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+        }
+        window.addEventListener('resize', appHeight)
+        appHeight()
+    </script>
     <div id="content">
         <!-- Greeter -->
         <div id="greeter">
@@ -456,16 +468,11 @@
             <p class="text reveal reveal-slide">Если у вас остались вопросы можно обратиться к нам по номерам:</p>
             <p class="text reveal reveal-slide">Майя: <a href="tel:+79659976806">+7 (965) 997-68-06</a></p>
             <p class="text reveal reveal-slide">Иван: <a href="tel:+79811685655">+7 (981) 168-56-55</a></p>
-            <p class="text reveal reveal-slide">Телеграмм: <a href="https://t.me/+SFBXvtTV9G4xZTgy">Свадьба Гаврильевы 💞</a> </p>
+            <p class="text reveal reveal-slide">Телеграмм: <a href="t.me/+SFBXvtTV9G4xZTgy">Свадьба Гаврильевы 💞</a> </p>
             <img class="divider reveal" src="divider-wedding.svg" />
             <p style="height: 150px;">&nbsp;</p>
         </div>
     </div>
-    <script>
-        var bgvideo = document.getElementById("bgVideo");
-        bgvideo.muted = true;
-        bgvideo.play();
-    </script>
 </body>
 
 </html>
