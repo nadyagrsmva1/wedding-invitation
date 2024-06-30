@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,viewport-fit=cover">
+    <meta charset="UTF-8">
+    <title>Приглашение</title>
+    <style>
+        @font-face {
+            font-family: SaintAmoure;
+            src: url("SaintAmoure.woff") format('woff');
+        }
+        @font-face {
+            font-family: CalmeExtra;
+            src: url("CalmExtra.woff") format('woff');
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            10% {
+                transform: scale(1.25);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        a {
+            color: #7a766c;
+            text-decoration: none;
+        }
+        video#bgVideo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: auto;
+            min-width: 100%;
+            height: auto;
+            min-height: 100%;
+            z-index: -100;    
+            background-size: cover;
+        }
+        /* img#greeter-pic {
+            position: absolute;
+            left: 50%;
+            margin-left: -50%;
+            top: 50%;
+            margin-top: -50%;
+            width: auto;
+            min-width: 100%;
+            height: auto;
+            min-height: 100%;
+            z-index: -99;    
+            background-size: cover;
+        } */
+        #content {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        #greeter {
+            width: 100%;
+            margin: auto;
+            height: 100vh;
+        }
+        #greeter-content {
+            --size: 350px;
+            position: absolute;
+            right: 50%;
+            width: var(--size);
+            margin-right: calc(var(--size) * -0.5);
+            height: 100%;
+        }
+        #greeter-names {
+            --size: 350px;
+
+            position: relative;
+            top: 30%;
+            height: calc(var(--size) * 0.8);
+            margin-top: calc(var(--size) * -0.4);
+
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+        #greeter-picture {
+            --size: 350px;
+
+            position: absolute;
+            top: 30%;
+            height: calc(var(--size) * 0.8);
+            margin-top: calc(var(--size) * -0.4);
+
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+        #greeter-date {
+            text-align: center;
+
+            position: relative;
+            top: 40%;
+            width: 100%;
+        }
+        #greeter-timer {
+            --size: 350px;
+
+            position: relative;
+            top: 60%;
+            height: calc(var(--size) * 0.2);
+            margin-top: calc(var(--size) * -0.1);
+
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+
+        #invite {
+            --size: 350px;
+
+            text-align: center;
+
+            position: relative;
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+        .divider {
+            margin-top: 100px;
+            width: 350px;
+        }
+        .header {
+            font-family: SaintAmoure;
+            font-size: 7rem;
+            line-height: 4rem;
+            margin-bottom: 50px;
+        }
+        .text {
+            --margin: 20px;
+            font-weight: 100;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            margin-left: var(--margin);
+            margin-right: var(--margin);
+        }
+        #calendar {
+            display: flex;
+            flex-direction: column;
+        }
+        .calendar-line {
+            --size: 230px;
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+        #calendar-date {
+            --size: 45px;
+            width: var(--size);
+            position: absolute;
+            left: calc(50% + 70px);
+            top: -2px;
+            margin-left: calc(var(--size) * -0.5);
+        }
+        #calendar-target-line {
+            position: relative;
+            display: inline-flex;
+        }
+        .reveal {
+            position: relative;
+            /* tradnsform: translateY(150px); */
+            opacity: 0;
+            transition: 1s all ease;
+        }
+        .reveal-slide {
+            transform: translateX(30px);
+        }
+        .reveal-slide-alt {
+            transform: translateX(-30px);
+        }
+        .reveal.active {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+        }
+        #calendar-date.active {
+            animation: heartbeat 1.25s infinite;
+        }
+        .debug-rect {
+            background-color: rgba(127, 0, 0, 0.5);
+        }
+        .day-plan-line {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+        .day-plan-icon {
+            left: 4rem;
+        }
+        .day-plan-text {
+            display: flexbox;
+            position: relative;
+            height: 100%;
+            flex-grow: 1;
+        }
+        .day-plan-time {
+            position: absolute;
+            font-family: SaintAmoure;
+            font-size: 7rem;
+            top: -2rem;
+
+            --size: 100px;
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+        .day-plan-title {
+            position: absolute;
+            font-weight: 100;
+            top: 4rem;
+
+            --size: 100px;
+            left: 50%;
+            width: var(--size);
+            margin-left: calc(var(--size) * -0.5);
+        }
+    </style>
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 50;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        window.addEventListener("load", reveal);
+    </script>
+</head>
+<body>
+    <!-- Background -->
+    <video id="bgVideo" preload="true" autoplay loop muted>
+        <source src="background-loop.mp4" type="video/mp4" />
+    </video>
+    <div id="content">
+        <!-- Greeter -->
+        <div id="greeter">
+            <!-- <img id="greeter-pic" src="IMG_4884.webp" /> -->
+            <div id="greeter-content">
+                <!-- Names -->
+                <svg id="greeter-picture" viewBox="0 0 100 100">
+                    <defs>
+                        <clipPath id="clip">
+                            <circle cx="50" cy="50" r="50" />
+                        </clipPath>
+                    </defs>
+                    <image href="IMG_4884.webp" x="0" y="0" height="100" width="100" clip-path="url(#clip)" />
+                </svg>
+                <svg id="greeter-names" viewBox="0 10 100 80" fill="white">
+
+                    <text x="50" y="40" font-size="42" text-anchor="middle" font-family="SaintAmoure">Майя</text>
+                    <text x="50" y="53" font-size="20" text-anchor="middle" font-family="SaintAmoure">&</text>
+                    <text x="50" y="80" font-size="42" text-anchor="middle" font-family="SaintAmoure">Иван</text>
+                </svg>
+                <!-- Date -->
+                <div id="greeter-date">
+                    <div style="font-family: CalmeExtra; font-weight: 100;">ПРИГЛАШАЮТ НА СВОЮ СВАДЬБУ</div>
+                    <div style="font-family: SaintAmoure; font-size: 6rem; line-height: 2rem;">10.08.2024</div>
+                </div>
+                <!-- Timer -->
+                <svg id="greeter-timer" viewBox="0 0 100 20">
+                    <!-- Time -->
+                    <text id="greeter-timer-days" x="12.5" y="12" font-size="12" font-weight="600" text-anchor="middle" font-family="CalmeExtra">00</text>
+                    <text id="greeter-timer-hours" x="37.5" y="12" font-size="12" font-weight="600" text-anchor="middle" font-family="CalmeExtra">00</text>
+                    <text id="greeter-timer-minutes" x="62.5" y="12" font-size="12" font-weight="600" text-anchor="middle" font-family="CalmeExtra">00</text>
+                    <text id="greeter-timer-seconds" x="87.5" y="12" font-size="12" font-weight="600" text-anchor="middle" font-family="CalmeExtra">00</text>
+                    
+                    <!-- Labels -->
+                    <text x="12.5" y="18" font-size="5" text-anchor="middle" font-family="CalmeExtra">дней</text>
+                    <text x="37.5" y="18" font-size="5" text-anchor="middle" font-family="CalmeExtra">часов</text>
+                    <text x="62.5" y="18" font-size="5" text-anchor="middle" font-family="CalmeExtra">минут</text>
+                    <text x="87.5" y="18" font-size="5" text-anchor="middle" font-family="CalmeExtra">секунд</text>
+                </svg>
+                <script>
+                    function updateTimer() {
+                        var delta = new Date('2024-08-10T16:00+0900') - new Date();
+                        var days = document.getElementById("greeter-timer-days");
+                        var hours = document.getElementById("greeter-timer-hours");
+                        var minutes = document.getElementById("greeter-timer-minutes");
+                        var seconds = document.getElementById("greeter-timer-seconds");
+                        days.textContent = Math.floor(delta / 1000 / 60 / 60 / 24);
+                        hours.textContent = Math.floor(delta / 1000 / 60 / 60) % 24;
+                        minutes.textContent = Math.floor(delta / 1000 / 60) % 60;
+                        seconds.textContent = Math.floor(delta / 1000) % 60;
+                    }
+                    setInterval(updateTimer, 1000);
+                </script>
+            </div>
+        </div>
+        <!-- Invite -->
+        <div id="invite">
+            <img class="divider reveal" src="divider-wedding.svg" />
+            <p class="header reveal reveal-slide">Дорогие наши родные и друзья!</p>
+            <p class="text reveal reveal-slide">Спешим сообщить радостную новость – мы женимся! И с удовольствием приглашаем присоединиться к нашему празднику, чтобы разделить с Вами радость особенного для нас дня события и стать частью нашей семейной истории.</p>
+            <!-- Calendar -->
+            <!-- Colors
+                accent: #7a766c
+                secondary: #9c918a
+                normal: #362f28
+            -->
+            <div id="calendar">
+                <svg id="calendar-top" class="calendar-line reveal reveal-slide" viewBox="0 0 80 13">
+                    <text x="0" y="10" font-size="10" text-anchor="start" letter-spacing="0.5" fill="#7a766c">Август</text>
+                    <text x="80" y="10" font-size="10" text-anchor="end" letter-spacing="0.5" fill="#9c918a">2024</text>
+                </svg>
+                <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                    <text x="05.714286" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">пн</text>
+                    <text x="17.142857" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">вт</text>
+                    <text x="28.571429" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">ср</text>
+                    <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">чт</text>
+                    <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">пт</text>
+                    <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#7a766c">сб</text>
+                    <text x="74.285714" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#9c918a">вс</text>
+                </svg>
+                <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                    <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">1</text>
+                    <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">2</text>
+                    <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">3</text>
+                    <text x="74.285714" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#9c918a">4</text>
+                </svg>
+                <div id="calendar-target-line">
+                    <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                        <text x="05.714286" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">5</text>
+                        <text x="17.142857" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">6</text>
+                        <text x="28.571429" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">7</text>
+                        <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">8</text>
+                        <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">9</text>
+                        <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">10</text>
+                        <text x="74.285714" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#9c918a">11</text>
+                    </svg>
+                    <svg id="calendar-date" class="calendar-line reveal reveal-slide" viewBox="0 0 12 10">
+                        <symbol id="icon" width="40" height="20">
+                            <path
+                                d="m 32.756506,16.956492 c 0.0706,0.12453 -0.14323,0.102305 -0.12983,0 0.002,-0.131234 0.0741,-0.0949 0.12983,0 z M 9.9931612,1.4173351 c 10.3766048,1.232958 3.0868058,16.6292399 9.5292348,5.265209 3.44311,-2.818342 7.92233,-3.944409 11.97927,-1.972734 4.4129,3.001434 3.83294,7.9971199 0.47555,11.5975699 -2.82011,3.118556 -9.32215,6.593417 -12.07382,9.049104 -1.9625,1.911703 -2.06481,1.849614 -3.49603,3.58775 -2.13748,2.39007 -0.987071,3.116439 -2.511071,0.346075 C 9.2509172,22.221347 -0.04195576,14.689189 2.9390162,5.2199271 c 1.129242,-2.611614 4.169128,-4.217459 7.054145,-3.802592 z M 8.0024362,0.10464913 C 4.2647552,0.74494113 0.48650524,4.3792571 0.01801624,8.7861581 -0.52490876,18.028583 11.361233,24.659748 14.298109,32.94297 c 0.549275,0.920045 0.696736,1.2446 1.364191,0.151342 0.200731,-0.482247 1.177576,-1.444625 1.125006,-1.588206 3.6e-4,-0.04374 0.0607,-0.100541 0.13864,-0.129822 0.18557,-0.05609 0.007,-0.269522 0.12983,-0.311855 0.0522,3.52e-4 0.0677,-0.03281 0.0392,-0.0822 2.14913,-2.016478 0.9966,-1.171575 5.05884,-5.019675 6.6361,-5.009092 23.10342,-16.3360819 8.74077,-23.0977739 -4.15149,-1.507066 -10.23796,-0.229305 -12.98292,3.549651 -0.3108,0.407811 -0.36795,0.52458 -0.47237,0.05186 -0.83432,-4.310592 -5.310015,-7.04603097 -9.4368098,-6.36164197 v 0"
+                                style="fill:#383129;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.0352778"
+                                id="path58" transform="scale(0.3)" />
+                        </symbol>
+                        <use href="#icon" x="0.5" y="0" />
+                    </svg>
+                </div>
+                <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                    <text x="05.714286" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">12</text>
+                    <text x="17.142857" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">13</text>
+                    <text x="28.571429" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">14</text>
+                    <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">15</text>
+                    <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">16</text>
+                    <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">17</text>
+                    <text x="74.285714" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#9c918a">18</text>
+                </svg>
+                <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                    <text x="05.714286" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">19</text>
+                    <text x="17.142857" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">20</text>
+                    <text x="28.571429" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">21</text>
+                    <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">22</text>
+                    <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">23</text>
+                    <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">24</text>
+                    <text x="74.285714" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#9c918a">25</text>
+                </svg>
+                <svg id="calendar-weekdays" class="calendar-line reveal reveal-slide" viewBox="2 0 76 10">
+                    <text x="05.714286" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">26</text>
+                    <text x="17.142857" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">27</text>
+                    <text x="28.571429" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">28</text>
+                    <text x="40.000000" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">29</text>
+                    <text x="51.428571" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">30</text>
+                    <text x="62.857143" y="7" font-size="7" text-anchor="middle" letter-spacing="0.5" fill="#362f28">31</text>
+                </svg>
+            </div>
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- Day plan -->
+            <p class="header reveal">План дня</p>
+            <div class="day-plan-line">
+                <img class="day-plan-icon reveal reveal-slide-alt" src="icon-hearts.svg" />
+                <span class="day-plan-text">
+                    <span class="day-plan-time reveal reveal-slide">16:00</span><br>
+                    <span class="day-plan-title reveal reveal-slide">Сбор гостей</span>
+                </span>
+            </div>
+            <div class="day-plan-line">
+                <img class="day-plan-icon reveal reveal-slide-alt" src="icon-rings.svg" />
+                <span class="day-plan-text">
+                    <span class="day-plan-time reveal reveal-slide">17:00</span><br>
+                    <span class="day-plan-title reveal reveal-slide">Церемония бракосочетания</span>
+                </span>
+            </div>
+            <div class="day-plan-line">
+                <img class="day-plan-icon reveal reveal-slide-alt" src="icon-dinner.svg" />
+                <span class="day-plan-text">
+                    <span class="day-plan-time reveal reveal-slide">18:00</span><br>
+                    <span class="day-plan-title reveal reveal-slide">Свадебный банкет</span>
+                </span>
+            </div>
+            <div class="day-plan-line">
+                <img class="day-plan-icon reveal reveal-slide-alt" src="icon-cake.svg" />
+                <span class="day-plan-text">
+                    <span class="day-plan-time reveal reveal-slide">22:00</span><br>
+                    <span class="day-plan-title reveal reveal-slide">Вынос торта</span>
+                </span>
+            </div>
+            <img class="divider reveal" src="divider-wedding.svg" />
+            
+            <!-- Place -->
+            <p class="header reveal">Место проведения</p>
+            <p class="text reveal reveal-slide">Свадебное торжество будет проходить в г. Якутске банкетном зале </p>
+            <p class="header reveal" style="margin-top: 0;">"Седьмое небо" </p>
+            <p class="text reveal reveal-slide">по адресу: ул. Кирова 12, этаж 7. </p>
+            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A2ebffc06e339090edee904ccd264df7b1980ba3710e109c7d79eb8721f011b9e&amp;width=100%25&amp;height=262&amp;lang=ru_RU&amp;scroll=true"></script>
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- Details-->
+            <p class="header reveal">Детали</p>
+            <p class="text reveal reveal-slide" style="margin-bottom: 15px;">Мы очень старались сделать праздник красивым и будем рады, если в своих нарядах и костюмах Вы поддержите цветовую гамму нашей свадьбы.</p>
+            <!-- Colors -->
+            <svg viewBox="0 0 100 50" class="reveal">
+                <circle cx="15" cy="13" r="10" fill="#ffffff" />
+                <circle cx="38.333333" cy="13" r="10" fill="#fbc86d" />
+                <circle cx="61.666667" cy="13" r="10" fill="#ed7d31" />
+                <circle cx="85" cy="13" r="10" fill="#78b64e" />
+                <circle cx="26.666667" cy="33" r="10" fill="#146107" />
+                <circle cx="50" cy="33" r="10" fill="#843c0c" />
+                <circle cx="73.333334" cy="33" r="10" fill="#000000" />
+            </svg>
+            <p class="text reveal reveal-slide">Если хотите сделать нам ценный и нужный подарок, мы будем очень благодарны за вклад в бюджет нашей молодой семьи.Мы создали телеграмм-чат нашего праздника, где можно будет узнать дополнительную информацию, поделиться фотографиями и видео в день и после свадьбы. </p>
+            <img class="divider reveal" src="qr.svg" style="margin-top: 0px;" />
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- Anketa -->
+            <p class="header reveal">Анкета гостя</p>
+            <p class="text reveal reveal-slide">Просим вас <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVFLUR-DHGs5KotPILVBX5dMFuc63AnO207HQAx0ts6RYEsA/viewform?usp=pp_url">подтвердить</a> свое присутствие до 20 июля включительно, это поможет нам в организации торжества</p>
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- End -->
+            <p class="header reveal">Будем рады видеть Вас на нашей свадьбе!</p>
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- Contact -->
+            <p class="header reveal">Контакты</p>
+            <p class="text reveal reveal-slide">Если у вас остались вопросы можно обратиться к нам по номерам:</p>
+            <p class="text reveal reveal-slide">Майя: <a href="tel:+79659976806">+7 (965) 997-68-06</a></p>
+            <p class="text reveal reveal-slide">Иван: <a href="tel:+79811685655">+7 (981) 168-56-55</a></p>
+            <p class="text reveal reveal-slide">Телеграмм: <a href="t.me/+SFBXvtTV9G4xZTgy">Свадьба Гаврильевы 💞</a> </p>
+            <img class="divider reveal" src="divider-wedding.svg" />
+            <p style="height: 150px;">&nbsp;</p>
+        </div>
+    </div>
+</body>
+
+</html>
