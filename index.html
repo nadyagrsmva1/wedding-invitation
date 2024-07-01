@@ -4,6 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,viewport-fit=cover">
     <meta charset="UTF-8">
+    <link rel="preload" as="image" href='IMG_4661.JPG'>
     <title>Приглашение</title>
     <style>
         @font-face {
@@ -228,6 +229,18 @@
             width: var(--size);
             margin-left: calc(var(--size) * -0.5);
         }
+
+        .button-link {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+            border: 1px solid black;
+            border-radius: 50vh;
+            padding: 0.5rem 1rem;
+            padding-bottom: 0.25rem;
+            font-size: 2rem;
+            font-weight: 100;
+        }
     </style>
     <script>
         function reveal() {
@@ -277,13 +290,13 @@
                 </svg>
                 <svg id="greeter-names" viewBox="0 10 100 80" fill="white">
 
-                    <text x="50" y="40" font-size="42" text-anchor="middle" font-family="SaintAmoure">Майя</text>
+                    <text x="50" y="40" font-size="42" text-anchor="middle" font-family="SaintAmoure">Иван</text>
                     <text x="50" y="53" font-size="20" text-anchor="middle" font-family="SaintAmoure">&</text>
-                    <text x="50" y="80" font-size="42" text-anchor="middle" font-family="SaintAmoure">Иван</text>
+                    <text x="50" y="80" font-size="42" text-anchor="middle" font-family="SaintAmoure">Майя</text>
                 </svg>
                 <!-- Date -->
                 <div id="greeter-date">
-                    <div style="font-family: CalmeExtra; font-weight: 100;">ПРИГЛАШАЮТ НА СВОЮ СВАДЬБУ</div>
+                    <div style="font-family: CalmeExtra; font-weight: 100;">ПРИГЛАШАЕМ НА НАШУ СВАДЬБУ</div>
                     <div style="font-family: SaintAmoure; font-size: 6rem; line-height: 2rem;">10.08.2024</div>
                 </div>
                 <!-- Timer -->
@@ -456,6 +469,7 @@
             <!-- Anketa -->
             <p class="header reveal">Анкета гостя</p>
             <p class="text reveal reveal-slide">Просим вас <a href="https://docs.google.com/forms/d/e/1FAIpQLSesbAqcHYBtnZlcyRawf7-6TD_3VVVmznGG0jYO2seQGECLsg/viewform?usp=sf_link">подтвердить</a> свое присутствие до 20 июля включительно, это поможет нам в организации торжества</p>
+            <p><a class="button-link reveal reveal-slide" href="https://docs.google.com/forms/d/e/1FAIpQLSesbAqcHYBtnZlcyRawf7-6TD_3VVVmznGG0jYO2seQGECLsg/viewform?usp=sf_link">АНКЕТА</a></p>
             <img class="divider reveal" src="divider-wedding.svg" />
 
             <!-- End -->
@@ -468,6 +482,17 @@
             <p class="text reveal reveal-slide">Майя: <a href="tel:+79659976806">+7 (965) 997-68-06</a></p>
             <p class="text reveal reveal-slide">Иван: <a href="tel:+79811685655">+7 (981) 168-56-55</a></p>
             <p class="text reveal reveal-slide">Телеграмм: <a href="https://t.me/+SFBXvtTV9G4xZTgy">Свадьба Гаврильевы 💞</a> </p>
+            <img class="divider reveal" src="divider-wedding.svg" />
+
+            <!-- Footer picture -->
+            <svg id="footer-picture" class="reveal" viewBox="0 0 100 100" style="margin-top: 100px;">
+                <defs>
+                    <clipPath id="clip">
+                        <circle cx="50" cy="50" r="50" />
+                    </clipPath>
+                </defs>
+                <image href="IMG_4661.JPG" x="-84" y="-75" height="250" width="275" clip-path="url(#clip)"  />
+            </svg>
             <img class="divider reveal" src="divider-wedding.svg" />
             <p style="height: 150px;">&nbsp;</p>
         </div>
